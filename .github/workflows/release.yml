@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+
+      - name: Create package zip
+        run: |
+          cd Packages/com.imaginantia.compeito
+          zip -r ../../com.imaginantia.compeito-${{ steps.version.outputs.version }}.zip .
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: com.imaginantia.compeito-${{ steps.version.outputs.version }}.zip
