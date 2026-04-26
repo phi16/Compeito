@@ -21,6 +21,7 @@ Add the following to your `.vscode/settings.json`.
     "*.compeito": "hlsl"
   }
 }
+```
 
 ## License
 
