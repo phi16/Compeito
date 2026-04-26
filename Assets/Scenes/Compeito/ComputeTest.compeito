@@ -1,0 +1,6 @@
+#pragma kernel Main
+
+float4 Main(uint2 iuv) {
+  float2 uv = (iuv + 0.5) / 256;
+  return float4(uv, 0, 1);
+}

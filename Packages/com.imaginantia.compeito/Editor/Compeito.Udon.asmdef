@@ -1,0 +1,5 @@
+{
+    "name": "Compeito.Editor",
+    "rootNamespace": "com.imaginantia",
+    "includePlatforms": ["Editor"]
+}

@@ -1,0 +1,8 @@
+{
+    "name": "Compeito.Udon",
+    "rootNamespace": "com.imaginantia",
+    "references": [
+        "UdonSharp.Runtime",
+        "VRC.SDKBase"
+    ]
+}
