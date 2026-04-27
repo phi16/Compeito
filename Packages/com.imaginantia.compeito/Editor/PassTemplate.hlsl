@@ -12,6 +12,7 @@ Pass {
     float4 vertex : SV_POSITION;
   };
 
+  #define CompeitoPass_{{KERNEL}}
   #line {{LINE}} "{{PATH}}"
   {{BODY}}
 

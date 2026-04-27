@@ -77,7 +77,7 @@ public class CompeitoImporter : ScriptedImporter
         return (kernels, i, body);
     }
 
-    static string GetTemplateDirectory()
+    public static string GetTemplateDirectory()
     {
         string[] guids = AssetDatabase.FindAssets($"{nameof(CompeitoImporter)} t:MonoScript");
         if (guids.Length == 0) return null;

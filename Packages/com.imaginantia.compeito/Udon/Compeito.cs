@@ -28,9 +28,9 @@ public class Compeito : MonoBehaviour
         return rt;
     }
 
-    public static void Dispatch(Material material, Kernel kernel, RT dest) {
-        if(material == null) {
-            Debug.LogError("Compeito.Dispatch: material is null");
+    public static void Dispatch(Material program, Kernel kernel, RT dest) {
+        if(program == null) {
+            Debug.LogError("Compeito.Dispatch: program is null");
             return;
         }
         if(kernel == -1) {
@@ -41,11 +41,11 @@ public class Compeito : MonoBehaviour
             Debug.LogError("Compeito.Dispatch: dest is null");
             return;
         }
-        material.SetVector("_CompeitoOutputSize", new Vector4(dest.width, dest.height, 0, 0));
+        program.SetVector("_CompeitoOutputSize", new Vector4(dest.width, dest.height, 0, 0));
 #if UDONSHARP
-        VRCGraphics.Blit(null, dest, material, kernel);
+        VRCGraphics.Blit(null, dest, program, kernel);
 #else
-        Graphics.Blit(null, dest, material, kernel);
+        Graphics.Blit(null, dest, program, kernel);
 #endif
     }
 }
