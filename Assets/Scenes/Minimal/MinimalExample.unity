@@ -600,28 +600,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1433322553675322867}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &1180003921372013838
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1433322553675322867}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1433322553675322867
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,7 +611,6 @@ GameObject:
   - component: {fileID: 6148009130431303807}
   - component: {fileID: 978706999893785334}
   - component: {fileID: 5057479664509408393}
-  - component: {fileID: 1180003921372013838}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -669,7 +646,7 @@ GameObject:
   - component: {fileID: 5108688433137093271}
   - component: {fileID: 8643767614390963838}
   m_Layer: 0
-  m_Name: ComputeTest
+  m_Name: Compute
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -739,8 +716,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 8643767614390963838}
-  testCompute: {fileID: 586645097001841572, guid: d2adeb1a124897741a2b3ba90158c1d5,
-    type: 3}
+  compute: {fileID: 586645097001841572, guid: d2adeb1a124897741a2b3ba90158c1d5, type: 3}
   display: {fileID: 2100000, guid: 2e7ff47e60f9f2a45bcc49d0487eba57, type: 2}
 --- !u!4 &6148009130431303807
 Transform:
