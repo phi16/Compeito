@@ -48,6 +48,18 @@ public class Compeito : MonoBehaviour
         Graphics.Blit(null, dest, program, kernel);
 #endif
     }
+
+    public static void Copy(RT src, RT dest) {
+        if(src == null || dest == null) {
+            Debug.LogError("Compeito.Copy: src or dest is null");
+            return;
+        }
+#if UDONSHARP
+        VRCGraphics.Blit(src, dest);
+#else
+        Graphics.Blit(src, dest);
+#endif
+    }
 }
 
 }

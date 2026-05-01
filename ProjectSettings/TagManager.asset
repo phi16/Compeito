@@ -8,7 +8,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - reserved3
+  - Item
   - Water
   - UI
   - reserved6
@@ -27,8 +27,8 @@ TagManager:
   - InternalUI
   - HardwareObjects
   - reserved4
-  - 
-  - 
+  - PostProcess
+  - reserved3
   - 
   - 
   - 

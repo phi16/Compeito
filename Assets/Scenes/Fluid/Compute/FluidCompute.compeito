@@ -1,0 +1,111 @@
+#pragma kernel AddForce
+#pragma kernel Advect
+#pragma kernel PressureInit
+#pragma kernel ProjectInit
+#pragma kernel ProjectStep
+#pragma kernel Finalize
+#pragma kernel UpdateColor
+#pragma kernel UpdateSurface
+
+#include "Fluid.hlsl"
+#include "UnityCG.cginc"
+
+float _Init;
+
+Texture2D<float4> _TouchVelocity;
+Texture2D<float4> _TouchColor;
+
+float4 AddForce(uint2 id) {
+  // u = u + f * dt
+  if(_Init > 0.5) return float4(0, 0, 0, 0);
+  float2 u = pickVelocity(id);
+  uint2 touchLoc = uint2(W - 1 - id.x, id.y);
+  float touch = _TouchColor.Load(int3(touchLoc, 0)).w;
+  float2 touchVelocity = _TouchVelocity.Load(int3(touchLoc, 0)).xy;
+  touchVelocity.x *= -1;
+  touchVelocity *= 64;
+  u = lerp(u, touchVelocity, saturate(touch) * 0.5);
+  return float4(u, 0, 0);
+}
+
+float4 Advect(uint2 id) {
+  float2 loc = id + 0.5;
+  float2 u0 = sampleVelocity(loc);
+  float2 u = sampleVelocity(loc - u0);
+  return float4(u, 0, 0);
+}
+
+float4 PressureInit(uint2 id) {
+  // ∫ρ = 0
+  float rho = pickPressure(id);
+  return float4(rho, 0, 0, 0);
+}
+
+float4 ProjectInit(uint2 id) {
+  // D = div u
+  float2 u = pickVelocity(id);
+  float div = - u.x - u.y;
+  if(id.x < W - 1) div += pickVelocity(id + uint2(1, 0)).x;
+  if(id.y < W - 1) div += pickVelocity(id + uint2(0, 1)).y;
+  return float4(div, 0, 0, 0);
+}
+
+float4 ProjectStep(uint2 id) {
+  // ∆ρ = D
+  // Σ[ρ] - 4ρ = D
+  // ρ = (Σ[ρ] - D) / 4
+
+  if(_Init > 0.5) return float4(0, 0, 0, 0);
+  float D = pickDivergence(id);
+  float2 s = 0;
+  s += pickPressureBound(id + uint2(1, 0));
+  s += pickPressureBound(id + uint2(-1, 0));
+  s += pickPressureBound(id + uint2(0, 1));
+  s += pickPressureBound(id + uint2(0, -1));
+  float rho = (s.x - D) / s.y;
+  return float4(rho, 0, 0, 0);
+}
+
+float4 Finalize(uint2 id) {
+  // u = u - grad ρ
+  float2 u = pickVelocity(id);
+  float2 g = pickPressureGrad(id).xy;
+  u -= g;
+  if(id.x == 0) u.x = 0;
+  if(id.y == 0) u.y = 0;
+  return float4(u, 0, 0);
+}
+
+float4 UpdateColor(uint2 id) {
+  if(_Init > 0.5) {
+    uint2 grid = id / 32;
+    bool checker = grid.x % 2 == grid.y % 2;
+    float3 h0 = cos(id.x * 0.01 + id.y * 0.03 + float3(0, 2, 4)) * 0.3 + 0.3;
+    float3 h1 = cos(id.x * 0.02 - id.y * 0.01 + float3(0, 2, 4)) * 0.3 + 0.7;
+    return float4(checker ? h0 : h1, 1);
+  }
+  float2 loc = id + 0.5;
+  float2 u0 = sampleVelocity(loc);
+  float4 c = sampleColor(loc - u0);
+
+  uint2 touchLoc = uint2(W - 1 - id.x, id.y);
+  float4 touchColor = _TouchColor.Load(int3(touchLoc, 0));
+  float touch = touchColor.w;
+  float3 h = cos(_Time.y + float3(0, 2, 4)) * 0.5 + 0.5;
+  if(touch > 0) touchColor.rgb /= touchColor.a;
+  touchColor.rgb *= lerp(h, 1, 0.8) * 1.5;
+  c.rgb = lerp(c.rgb, touchColor.rgb, saturate(touch) * 0.5);
+
+  // float touch = length(_TouchVelocity.Load(int3(touchLoc, 0)).xy) - 0.01;
+  // c.rgb = lerp(h, c.rgb, exp(- max(0, touch) * 100));
+
+  return c;
+}
+
+float4 UpdateSurface(uint2 id) {
+  float2 loc = id + 0.5;
+  float3 gh = pickPressureGrad(id);
+  float h = gh.z;
+  float2 g = gh.xy;
+  return float4(g, h, 0);
+}
