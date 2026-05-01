@@ -32,9 +32,6 @@ public class FluidCompute : UdonSharpBehaviour
 
     public int projectIterations = 4;
 
-    public Material displayVelocity;
-    public Material displayPressure;
-    public Material displayColor;
     public Material fluidSurface;
 
     void Start()
@@ -97,9 +94,6 @@ public class FluidCompute : UdonSharpBehaviour
         Compeito.Copy(velocity1, velocity0);
         Compeito.Copy(color1, color0);
 
-        displayVelocity.SetTexture("_MainTex", velocity0);
-        displayPressure.SetTexture("_MainTex", pressure0);
-        displayColor.SetTexture("_MainTex", color0);
         fluidSurface.SetTexture("_ColorSampler", color0);
         fluidSurface.SetTexture("_Surface", surface);
     }
