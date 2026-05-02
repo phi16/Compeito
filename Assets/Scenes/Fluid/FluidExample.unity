@@ -806,9 +806,6 @@ MonoBehaviour:
   touchVelocity: {fileID: 8400000, guid: 0ee1444686990154f9aab510d328ffef, type: 2}
   touchColor: {fileID: 8400000, guid: 352d9bd6bac684343ad83ce4e6827c6f, type: 2}
   projectIterations: 4
-  displayVelocity: {fileID: 2100000, guid: ecf0ddf1b84e8ac47b1da352d661b21b, type: 2}
-  displayPressure: {fileID: 2100000, guid: d74ed5cf014c7e544abc11ee5b680c7b, type: 2}
-  displayColor: {fileID: 2100000, guid: 28543ddcffadbcb4eaa3483a985ac654, type: 2}
   fluidSurface: {fileID: 2100000, guid: 55af1080bb3f9114283b9c55381a3956, type: 2}
 --- !u!1 &1113833582
 GameObject:
@@ -1249,7 +1246,7 @@ PrefabInstance:
     - target: {fileID: 6759095419728963412, guid: 8894fa7e4588a5c4fab98453e558847d,
         type: 3}
       propertyPath: DynamicMaterials.Array.size
-      value: 7
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6759095419728963412, guid: 8894fa7e4588a5c4fab98453e558847d,
         type: 3}
@@ -1285,17 +1282,17 @@ PrefabInstance:
         type: 3}
       propertyPath: DynamicMaterials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 153f9a9895433a6449ef31ad4150db6e, type: 2}
     - target: {fileID: 6759095419728963412, guid: 8894fa7e4588a5c4fab98453e558847d,
         type: 3}
       propertyPath: DynamicMaterials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 153f9a9895433a6449ef31ad4150db6e, type: 2}
+      objectReference: {fileID: 2100000, guid: 55af1080bb3f9114283b9c55381a3956, type: 2}
     - target: {fileID: 6759095419728963412, guid: 8894fa7e4588a5c4fab98453e558847d,
         type: 3}
       propertyPath: DynamicMaterials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 55af1080bb3f9114283b9c55381a3956, type: 2}
+      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 6759095419728963412, guid: 8894fa7e4588a5c4fab98453e558847d,
         type: 3}
       propertyPath: DynamicMaterials.Array.data[3]

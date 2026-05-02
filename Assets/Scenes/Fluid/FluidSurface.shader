@@ -102,8 +102,6 @@ Shader "Hidden/Fluid/FluidSurface"
                 return o;
             }
 
-            sampler2D _ColorSampler;
-
             fixed4 frag (v2f i) : SV_Target
             {
                 float2 g = sampleSurfaceGrad(i.uv * W);
@@ -112,7 +110,7 @@ Shader "Hidden/Fluid/FluidSurface"
                 float3 worldNormal = mul((float3x3)unity_ObjectToWorld, normal);
                 worldNormal.xy *= -1;
                 worldNormal = normalize(worldNormal);
-                float3 col = tex2D(_ColorSampler, i.uv).rgb;
+                float3 col = _Color.Sample(sampler_linear_clamp, i.uv).rgb;
                 col.rgb *= max(0, worldNormal.y);
                 return float4(col, 1);
             }
