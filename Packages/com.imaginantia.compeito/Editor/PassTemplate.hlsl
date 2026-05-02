@@ -26,7 +26,7 @@ Pass {
     return output;
   }
 
-  float4 CompeitoGeneratedFrag(CompeitoGeneratedVertOutput input) : SV_Target {
+  {{RETURN_TYPE}} CompeitoGeneratedFrag(CompeitoGeneratedVertOutput input) : SV_Target {
     uint2 id = (uint2)input.vertex.xy;
     #if !UNITY_UV_STARTS_AT_TOP
     id.y = (uint)_CompeitoOutputSize.y - id.y - 1; 

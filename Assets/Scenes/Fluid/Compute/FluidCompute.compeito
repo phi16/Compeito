@@ -1,12 +1,12 @@
-#pragma kernel AddForce
-#pragma kernel Advect
-#pragma kernel PressureInit
-#pragma kernel ProjectInit
-#pragma kernel ProjectStep
-#pragma kernel Finalize
-#pragma kernel AdvectColor
-#pragma kernel UpdateColor
-#pragma kernel UpdateSurface
+#pragma kernel AddForce float2
+#pragma kernel Advect float2
+#pragma kernel PressureInit float
+#pragma kernel ProjectInit float
+#pragma kernel ProjectStep float
+#pragma kernel Finalize float2
+#pragma kernel AdvectColor float4
+#pragma kernel UpdateColor float4
+#pragma kernel UpdateSurface float4
 
 #include "Fluid.hlsl"
 #include "UnityCG.cginc"
@@ -27,48 +27,48 @@ float4 pickTouchColor(uint2 id) {
   return _TouchColor.Load(int3(touchLoc, 0));
 }
 
-float4 AddForce(uint2 id) {
+float2 AddForce(uint2 id) {
   // u = u + f * dt
-  if(_Init > 0.5) return float4(0, 0, 0, 0);
+  if(_Init > 0.5) return float2(0, 0);
   float2 u = pickVelocity(id);
   float touch = pickTouchColor(id).w;
   float2 touchVelocity = pickTouchVelocity(id);
   touchVelocity *= 64;
   u = lerp(u, touchVelocity, saturate(touch) * 0.5);
-  return float4(u, 0, 0);
+  return u;
 }
 
-float4 Advect(uint2 id) {
+float2 Advect(uint2 id) {
   // u = Backtrace[u](u)
   float2 loc = id + 0.5;
   float2 u0 = sampleVelocity(loc);
   float2 u = sampleVelocity(loc - u0);
-  return float4(u, 0, 0);
+  return u;
 }
 
-float4 PressureInit(uint2 id) {
+float PressureInit(uint2 id) {
   // ensure ∫ρ = 0
   float rho = pickPressure(id);
   float rhoAverage = pickPressureAverage(id);
   rho -= rhoAverage;
-  return float4(rho, 0, 0, 0);
+  return rho;
 }
 
-float4 ProjectInit(uint2 id) {
+float ProjectInit(uint2 id) {
   // D = div u
   float2 u = pickVelocity(id);
   float div = - u.x - u.y;
   if(id.x < W - 1) div += pickVelocity(id + uint2(1, 0)).x;
   if(id.y < W - 1) div += pickVelocity(id + uint2(0, 1)).y;
-  return float4(div, 0, 0, 0);
+  return div;
 }
 
-float4 ProjectStep(uint2 id) {
+float ProjectStep(uint2 id) {
   // ∆ρ = D
   // Σ[ρ] - 4ρ = D
   // ρ = (Σ[ρ] - D) / 4
 
-  if(_Init > 0.5) return float4(0, 0, 0, 0);
+  if(_Init > 0.5) return 0;
   float D = pickDivergence(id);
   float2 s = 0;
   s += pickPressureBound(id + uint2(1, 0));
@@ -76,17 +76,17 @@ float4 ProjectStep(uint2 id) {
   s += pickPressureBound(id + uint2(0, 1));
   s += pickPressureBound(id + uint2(0, -1));
   float rho = (s.x - D) / s.y;
-  return float4(rho, 0, 0, 0);
+  return rho;
 }
 
-float4 Finalize(uint2 id) {
+float2 Finalize(uint2 id) {
   // u = u - grad ρ
   float2 u = pickVelocity(id);
   float2 g = pickPressureGrad(id).xy;
   u -= g;
   if(id.x == 0) u.x = 0;
   if(id.y == 0) u.y = 0;
-  return float4(u, 0, 0);
+  return u;
 }
 
 float4 AdvectColor(uint2 id) {
@@ -124,6 +124,7 @@ float4 UpdateColor(uint2 id) {
 }
 
 float4 UpdateSurface(uint2 id) {
+  // g = grad ρ, h = ρ
   float2 loc = id + 0.5;
   float3 gh = pickPressureGrad(id);
   float h = gh.z;
