@@ -71,7 +71,7 @@ Add the following to your `.vscode/settings.json`.
 ## Note
 
 - PC platform 以外の動作は未確認 (確認予定)
-- VRChat SDK が入っていない状態での動作は未確認 (確認予定)
+- VRChat SDK が入っていない状態でも一応動きます
 
 ## License
 
