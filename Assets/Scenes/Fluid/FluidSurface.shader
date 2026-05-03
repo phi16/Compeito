@@ -2,23 +2,19 @@ Shader "Hidden/Fluid/FluidSurface"
 {
     Properties
     {
-        _TessFactor ("Tessellation Factor", Range(1, 64)) = 4
         _HeightIntensity ("Height Intensity", Range(0, 8)) = 1
         _NormalIntensity ("Normal Intensity", Range(0, 8)) = 1
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Opaque" "DisableBatching"="True" }
         LOD 100
 
         Pass
         {
             CGPROGRAM
             #pragma vertex vert
-            #pragma hull hull
-            #pragma domain domain
             #pragma fragment frag
-            #pragma target 5.0
 
             #include "UnityCG.cginc"
 
@@ -28,77 +24,25 @@ Shader "Hidden/Fluid/FluidSurface"
                 float2 uv : TEXCOORD0;
             };
 
-            struct ControlPoint
-            {
-                float4 vertex : INTERNALTESSPOS;
-                float2 uv     : TEXCOORD0;
-            };
-
-            struct TessFactors
-            {
-                float edge[3] : SV_TessFactor;
-                float inside  : SV_InsideTessFactor;
-            };
-
             struct v2f
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
             };
 
-            ControlPoint vert(appdata v)
-            {
-                ControlPoint o;
-                o.vertex = v.vertex;
-                o.uv = v.uv;
-                return o;
-            }
-
-            float _TessFactor;
-
-            TessFactors patchConstant(InputPatch<ControlPoint, 3> patch)
-            {
-                TessFactors f;
-                f.edge[0] = _TessFactor;
-                f.edge[1] = _TessFactor;
-                f.edge[2] = _TessFactor;
-                f.inside = _TessFactor;
-                return f;
-            }
-
-            [domain("tri")]
-            [partitioning("fractional_odd")]
-            [outputtopology("triangle_cw")]
-            [outputcontrolpoints(3)]
-            [patchconstantfunc("patchConstant")]
-            ControlPoint hull(InputPatch<ControlPoint, 3> patch, uint id : SV_OutputControlPointID)
-            {
-                return patch[id];
-            }
-
             #include "Compute/Fluid.hlsl"
 
             float _HeightIntensity;
             float _NormalIntensity;
 
-            [domain("tri")]
-            v2f domain(TessFactors factors,
-                       OutputPatch<ControlPoint, 3> patch,
-                       float3 bary : SV_DomainLocation)
+            v2f vert(appdata v)
             {
-                float4 pos = patch[0].vertex * bary.x
-                           + patch[1].vertex * bary.y
-                           + patch[2].vertex * bary.z;
-                float2 uv  = patch[0].uv * bary.x
-                           + patch[1].uv * bary.y
-                           + patch[2].uv * bary.z;
-
-                float3 s = sampleSurfaceHeight(uv * W);
-                pos.xyz += float3(0, 0, - 1.0 / W) * s.z * _HeightIntensity;
+                float3 s = sampleSurfaceHeight(v.uv * W);
+                v.vertex.xyz += float3(0, 0, - 1.0 / W) * s.z * _HeightIntensity;
 
                 v2f o;
-                o.vertex = UnityObjectToClipPos(pos);
-                o.uv = uv;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = v.uv;
                 return o;
             }
 

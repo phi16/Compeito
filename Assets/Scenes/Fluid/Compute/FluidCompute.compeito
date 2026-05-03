@@ -8,6 +8,8 @@
 #pragma kernel UpdateColor float4
 #pragma kernel UpdateSurface float4
 
+// Stable Fluids + MacCormack method + Height from pressure + Touch interaction
+
 #include "Fluid.hlsl"
 #include "UnityCG.cginc"
 
