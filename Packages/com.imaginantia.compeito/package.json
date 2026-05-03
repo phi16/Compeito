@@ -1,7 +1,7 @@
 {
   "name": "com.imaginantia.compeito",
   "displayName": "Compeito",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "unity": "2022.3",
   "description": "GPGPU Utility for VRChat",
   "author": {
