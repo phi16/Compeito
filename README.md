@@ -76,3 +76,5 @@ Add the following to your `.vscode/settings.json`.
 ## License
 
 MIT
+
+(なお、Compeito を使って生成された shader/material には MIT License は適用されないので、特にワールドクレジットなどに載せる必要はありません。)
