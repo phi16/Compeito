@@ -8,5 +8,12 @@
     "name": "phi16",
     "email": "phi16.256@gmail.com",
     "url": "https://github.com/phi16"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Examples",
+      "description": "Minimal example + Fluid simulation example",
+      "path": "Samples~"
+    }
+  ]
 }
