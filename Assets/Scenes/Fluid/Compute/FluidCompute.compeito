@@ -36,7 +36,7 @@ float2 AddForce(uint2 id) {
   float touch = pickTouchColor(id).w;
   float2 touchVelocity = pickTouchVelocity(id);
   touchVelocity *= 64;
-  u = lerp(u, touchVelocity, saturate(touch) * 0.5);
+  u = lerp(u, touchVelocity, saturate(touch));
   return u;
 }
 
@@ -50,6 +50,7 @@ float2 Advect(uint2 id) {
 
 float PressureInit(uint2 id) {
   // ensure ∫ρ = 0
+  if(_Init > 0.5) return 0;
   float rho = pickPressure(id);
   float rhoAverage = pickPressureAverage(id);
   rho -= rhoAverage;
@@ -120,7 +121,7 @@ float4 UpdateColor(uint2 id) {
   float3 h = cos(_Time.y + float3(0, 2, 4)) * 0.5 + 0.5;
   if(touch > 0) touchColor.rgb /= touchColor.a;
   touchColor.rgb *= lerp(h, 1, 0.8) * 1.5;
-  c.rgb = lerp(c.rgb, touchColor.rgb, saturate(touch) * 0.5);
+  c.rgb = lerp(c.rgb, touchColor.rgb, saturate(touch));
 
   return c;
 }
