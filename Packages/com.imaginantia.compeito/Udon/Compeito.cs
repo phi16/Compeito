@@ -41,7 +41,6 @@ public class Compeito : MonoBehaviour
             Debug.LogError("Compeito.Dispatch: dest is null");
             return;
         }
-        program.SetVector("_CompeitoOutputSize", new Vector4(dest.width, dest.height, 0, 0));
 #if UDONSHARP
         VRCGraphics.Blit(null, dest, program, kernel);
 #else
