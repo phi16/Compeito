@@ -42,11 +42,11 @@ Install from VPM: https://phi16.github.io/VRC_Packages/
 
 - Examples (highly recommended to check out / まず見てもらうといいと思います)
   - Minimal
-    - [ComputeTest.compeito](https://github.com/phi16/Compeito/blob/main/Assets/Scenes/Minimal/ComputeTest.compeito)
-    - [ComputeTest.cs](https://github.com/phi16/Compeito/blob/main/Assets/Scenes/Minimal/ComputeTest.cs)
+    - [ComputeTest.compeito](https://github.com/phi16/Compeito/blob/main/Packages/com.imaginantia.compeito/Samples~/Minimal/ComputeTest.compeito)
+    - [ComputeTest.cs](https://github.com/phi16/Compeito/blob/main/Packages/com.imaginantia.compeito/Samples~/Minimal/ComputeTest.cs)
   - Fluid
-    - [FluidCompute.compeito](https://github.com/phi16/Compeito/blob/main/Assets/Scenes/Fluid/Compute/FluidCompute.compeito)
-    - [FluidCompute.cs](https://github.com/phi16/Compeito/blob/main/Assets/Scenes/Fluid/Compute/FluidCompute.cs)
+    - [FluidCompute.compeito](https://github.com/phi16/Compeito/blob/main/Packages/com.imaginantia.compeito/Samples~/Fluid/Compute/FluidCompute.compeito)
+    - [FluidCompute.cs](https://github.com/phi16/Compeito/blob/main/Packages/com.imaginantia.compeito/Samples~/Fluid/Compute/FluidCompute.cs)
 - Main implementation
   - [CompeitoImporter.cs](https://github.com/phi16/Compeito/blob/main/Packages/com.imaginantia.compeito/Editor/CompeitoImporter.cs)
 - Udon utility
