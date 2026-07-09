@@ -1,33 +1,38 @@
-Pass {
-  Name "{{KERNEL}}"
-  Cull Off
-  HLSLPROGRAM
-  #pragma vertex CompeitoGeneratedVert
-  #pragma fragment CompeitoGeneratedFrag
-  
-  struct CompeitoGeneratedVertInput {
-    float2 uv : TEXCOORD0;
-  };
-  struct CompeitoGeneratedVertOutput {
-    float4 vertex : SV_POSITION;
-  };
+    Pass {
+      Name "{{KERNEL}}"
+      Cull Off
+      HLSLPROGRAM
+      #pragma vertex CompeitoGeneratedVert
+      #pragma fragment CompeitoGeneratedFrag
 
-  #define CompeitoPass_{{KERNEL}}
-  #line {{LINE}} "{{PATH}}"
-  {{BODY}}
+      struct CompeitoGeneratedVertInput {
+        float2 uv : TEXCOORD0;
+      };
+      struct CompeitoGeneratedVertOutput {
+        float4 vertex : SV_POSITION;
+      };
 
-  #include "UnityCG.cginc"
+      #define CompeitoPass_{{KERNEL}}
 
-  CompeitoGeneratedVertOutput CompeitoGeneratedVert(CompeitoGeneratedVertInput input) {
-    CompeitoGeneratedVertOutput output;
-    output.vertex = float4(input.uv*2-1, 0, 1);
-    return output;
-  }
+// user code begin
+#line {{LINE}} "{{PATH}}"
+//////////////////////////////
+{{BODY}}
+//////////////////////////////
+// user code end
 
-  {{RETURN_TYPE}} CompeitoGeneratedFrag(CompeitoGeneratedVertOutput input) : SV_Target {
-    uint2 id = (uint2)input.vertex.xy;
-    return {{KERNEL}}(id);
-  }
+      #include "UnityCG.cginc"
 
-  ENDHLSL
-}
+      CompeitoGeneratedVertOutput CompeitoGeneratedVert(CompeitoGeneratedVertInput input) {
+        CompeitoGeneratedVertOutput output;
+        output.vertex = float4(input.uv*2-1, 0, 1);
+        return output;
+      }
+
+      {{RETURN_TYPE}} CompeitoGeneratedFrag(CompeitoGeneratedVertOutput input) : SV_Target {
+        uint2 id = (uint2)input.vertex.xy;
+        return {{KERNEL}}(id);
+      }
+
+      ENDHLSL
+    }

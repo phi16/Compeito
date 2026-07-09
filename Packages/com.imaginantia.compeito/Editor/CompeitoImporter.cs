@@ -14,8 +14,23 @@ public class CompeitoImporter : ScriptedImporter
 {
     public override void OnImportAsset(AssetImportContext ctx)
     {
-        string src = File.ReadAllText(ctx.assetPath);
         string name = Path.GetFileNameWithoutExtension(ctx.assetPath);
+        string shaderSrc = GenerateShaderSource(ctx.assetPath, ctx);
+
+        Shader shaderAsset = ShaderUtil.CreateShaderAsset(ctx, shaderSrc, true);
+        shaderAsset.name = name;
+
+        Material material = new Material(shaderAsset);
+
+        ctx.AddObjectToAsset("shader", shaderAsset);
+        ctx.AddObjectToAsset("material", material);
+        ctx.SetMainObject(material);
+    }
+
+    public static string GenerateShaderSource(string assetPath, AssetImportContext ctx)
+    {
+        string src = File.ReadAllText(assetPath);
+        string name = Path.GetFileNameWithoutExtension(assetPath);
 
         string templateDir = GetTemplateDirectory();
         string shaderTemplate = File.ReadAllText(Path.Combine(templateDir, "ShaderTemplate.hlsl"));
@@ -29,23 +44,15 @@ public class CompeitoImporter : ScriptedImporter
             string pass = passTemplate
                 .Replace("{{KERNEL}}", kernel.Name)
                 .Replace("{{RETURN_TYPE}}", kernel.ReturnType)
-                .Replace("{{PATH}}", ctx.assetPath)
-                .Replace("{{LINE}}", (line + 1).ToString())
+                .Replace("{{PATH}}", assetPath)
+                .Replace("{{LINE}}", line.ToString())
                 .Replace("{{BODY}}", body);
             sb.Append(pass);
+            sb.AppendLine();
         }
-        string shaderSrc = shaderTemplate
+        return shaderTemplate
             .Replace("{{NAME}}", name)
             .Replace("{{PASSES}}", sb.ToString());
-
-        Shader shaderAsset = ShaderUtil.CreateShaderAsset(ctx, shaderSrc, true);
-        shaderAsset.name = name;
-
-        Material material = new Material(shaderAsset);
-
-        ctx.AddObjectToAsset("shader", shaderAsset);
-        ctx.AddObjectToAsset("material", material);
-        ctx.SetMainObject(material);
     }
 
     struct KernelInfo
@@ -96,6 +103,15 @@ public class CompeitoImporter : ScriptedImporter
         return sb.ToString().TrimEnd();
     }
 
+    static void LogError(AssetImportContext ctx, string message)
+    {
+        if (ctx == null) {
+            Debug.LogError(message);
+            return;
+        }
+        ctx.LogImportError(message);
+    }
+
     static (List<KernelInfo> kernels, int line, string body) Parse(string src, AssetImportContext ctx)
     {
         var kernels = new List<KernelInfo>();
@@ -114,9 +130,9 @@ public class CompeitoImporter : ScriptedImporter
             if (nameIdx >= 0)
             {
                 if (tokens.Length < nameIdx + 1 || !IdentifierRx.IsMatch(tokens[nameIdx]))
-                    ctx.LogImportError($"line {i + 1}: #pragma kernel requires a valid identifier");
+                    LogError(ctx, $"line {i + 1}: #pragma kernel requires a valid identifier");
                 else if (tokens.Length > nameIdx + 2)
-                    ctx.LogImportError($"line {i + 1}: #pragma kernel has too many tokens");
+                    LogError(ctx, $"line {i + 1}: #pragma kernel has too many tokens");
                 else
                 {
                     string returnType = tokens.Length == nameIdx + 2 ? tokens[nameIdx + 1] : "float4";
