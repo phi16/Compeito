@@ -70,8 +70,10 @@ Add the following to your `.vscode/settings.json`.
 
 ## Note
 
-- PC platform 以外の動作は未確認 (確認予定)
+- PC platform 以外でも動きます (動かないとしたらシェーダ側の問題のはず)
+  - (Fluid Example は PC でしか動きません)
 - VRChat SDK が入っていない状態でも一応動きます
+- Import Settings に (`.shader` ファイルへの) Bake ボタンがあります
 
 ## License
 
